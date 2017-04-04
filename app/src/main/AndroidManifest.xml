@@ -20,6 +20,8 @@
         <activity android:name=".pull.normal.PullNormalActivity" />
         <activity android:name=".pull.nested.PullNestedActivity" />
         <activity android:name=".pull.fragment.PullFragmentActivity" />
+        <activity android:name=".item.ItemActivity" />
+        <activity android:name=".item.headerpush.HeaderPushActivity" />
     </application>
 
 </manifest>
