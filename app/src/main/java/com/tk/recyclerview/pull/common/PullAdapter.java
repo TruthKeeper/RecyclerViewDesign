@@ -19,9 +19,14 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * Created by TK on 2016/10/20.
+ * <pre>
+ *     author : TK
+ *     time   : 2017/04/05
+ *     desc   : 上拉加载，代理模式，原理：
+ *              ItemViewType；
+ *              监听RecyclerView滚动；
+ * </pre>
  */
-
 public class PullAdapter extends RecyclerView.Adapter {
     public static final int TYPE_EMPTY = 23333;
     public static final int TYPE_END = 24444;

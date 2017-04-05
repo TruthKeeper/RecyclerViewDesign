@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.tk.recyclerview.Item;
 import com.tk.recyclerview.MainAdapter;
 import com.tk.recyclerview.R;
+import com.tk.recyclerview.item.folder.ItemFolderActivity;
 import com.tk.recyclerview.item.headercrash.HeaderCrashActivity;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class ItemActivity extends AppCompatActivity {
         recyclerview.addItemDecoration(new NoLastItemDecoration(this, 0, 0));
 
         mList.add(new Item(getString(R.string.header_crash), new Intent(this, HeaderCrashActivity.class)));
-        mList.add(new Item(getString(R.string.header_crash), new Intent(this, HeaderCrashActivity.class)));
+        mList.add(new Item(getString(R.string.item_folder), new Intent(this, ItemFolderActivity.class)));
 
         recyclerview.setAdapter(new MainAdapter(mList));
     }
