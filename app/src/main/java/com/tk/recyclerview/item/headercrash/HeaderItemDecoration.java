@@ -23,9 +23,13 @@ import java.util.List;
  */
 public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint;
+    //tag实际高度
     private int tagHeight;
+    //tag需要绘制的高度
     private int tagDrawHeight;
+    //tag左缩进
     private int tagLeft;
+    //字体绘制区域
     private int textHeight;
     private List<Item> list;
 
@@ -80,6 +84,7 @@ public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
             int[] parentL = new int[2];
             view.getLocationInWindow(viewL);
             parent.getLocationInWindow(parentL);
+            //根据位置计算绘制的区域高度
             if (viewL[1] - parentL[1] > 0) {
                 if (viewL[1] - parentL[1] > tagHeight) {
                     tagDrawHeight = tagHeight;
