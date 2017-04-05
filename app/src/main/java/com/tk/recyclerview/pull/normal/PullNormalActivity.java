@@ -97,9 +97,9 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
                     if (r > 0) {
                         mList.add("新数据");
                         pullAdapter.getSourceAdapter().notifyItemRangeInserted(pullAdapter.getSourceAdapter().getItemCount() - 1, 1);
-                        pullAdapter.setLoadResult(PullAdapter.Status.LOAD_STANDBY);
+                        pullAdapter.setLoadResult(PullAdapter.LOAD_STANDBY);
                     } else {
-                        pullAdapter.setLoadResult(PullAdapter.Status.LOAD_ERROR);
+                        pullAdapter.setLoadResult(PullAdapter.LOAD_ERROR);
                     }
                 }
             }, 1000);
@@ -107,7 +107,7 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    pullAdapter.setLoadResult(PullAdapter.Status.LOAD_END);
+                    pullAdapter.setLoadResult(PullAdapter.LOAD_END);
                 }
             }, 1000);
         }

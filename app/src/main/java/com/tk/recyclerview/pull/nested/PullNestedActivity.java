@@ -70,7 +70,7 @@ public class PullNestedActivity extends AppCompatActivity {
                     public void run() {
                         mList.add("新数据");
                         adapter.getSourceAdapter().notifyItemRangeInserted(adapter.getSourceAdapter().getItemCount() - 1, 1);
-                        adapter.setLoadResult(PullAdapter.Status.LOAD_STANDBY);
+                        adapter.setLoadResult(PullAdapter.LOAD_STANDBY);
                         recyclerView.requestLayout();
                     }
                 }, 1000);
@@ -90,7 +90,7 @@ public class PullNestedActivity extends AppCompatActivity {
                 }
                 dialog.dismiss();
                 adapter.getSourceAdapter().notifyDataSetChanged();
-                adapter.setLoadResult(PullAdapter.Status.LOAD_STANDBY);
+                adapter.setLoadResult(PullAdapter.LOAD_STANDBY);
             }
         }, 2000);
 

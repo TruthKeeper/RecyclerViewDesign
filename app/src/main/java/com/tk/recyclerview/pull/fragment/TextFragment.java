@@ -75,7 +75,7 @@ public class TextFragment extends LazyFragment implements SwipeRefreshLayout.OnR
                 }
                 swipeLayout.setRefreshing(false);
                 adapter.getSourceAdapter().notifyDataSetChanged();
-                adapter.setLoadResult(PullAdapter.Status.LOAD_STANDBY);
+                adapter.setLoadResult(PullAdapter.LOAD_STANDBY);
             }
         }, 2000);
     }
@@ -105,9 +105,9 @@ public class TextFragment extends LazyFragment implements SwipeRefreshLayout.OnR
                     if (r > 0) {
                         mList.add("新数据");
                         adapter.getSourceAdapter().notifyItemRangeInserted(adapter.getSourceAdapter().getItemCount() - 1, 1);
-                        adapter.setLoadResult(PullAdapter.Status.LOAD_STANDBY);
+                        adapter.setLoadResult(PullAdapter.LOAD_STANDBY);
                     } else {
-                        adapter.setLoadResult(PullAdapter.Status.LOAD_ERROR);
+                        adapter.setLoadResult(PullAdapter.LOAD_ERROR);
                     }
                 }
             }, 1000);
@@ -115,7 +115,7 @@ public class TextFragment extends LazyFragment implements SwipeRefreshLayout.OnR
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.setLoadResult(PullAdapter.Status.LOAD_END);
+                    adapter.setLoadResult(PullAdapter.LOAD_END);
                 }
             }, 1000);
         }

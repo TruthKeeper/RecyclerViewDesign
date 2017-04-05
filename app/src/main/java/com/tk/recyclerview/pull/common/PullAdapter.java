@@ -1,6 +1,7 @@
 package com.tk.recyclerview.pull.common;
 
 import android.content.res.Resources;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
@@ -22,30 +25,33 @@ import static android.view.View.VISIBLE;
 public class PullAdapter extends RecyclerView.Adapter {
     public static final int TYPE_EMPTY = 23333;
     public static final int TYPE_END = 24444;
+    /**
+     * 待命
+     */
+    public static final int LOAD_STANDBY = 0x00;
+    /**
+     * 加载失败
+     */
+    public static final int LOAD_ERROR = 0x01;
+    /**
+     * 加载完毕
+     */
+    public static final int LOAD_END = 0x02;
+    /**
+     * 加载中
+     */
+    public static final int LOAD_ING = 0x03;
 
-    public enum Status {
-        /**
-         * 待命
-         */
-        LOAD_STANDBY,
-        /**
-         * 加载失败
-         */
-        LOAD_ERROR,
-        /**
-         * 加载完毕
-         */
-        LOAD_END,
-        /**
-         * 加载中
-         */
-        LOAD_ING,
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({LOAD_STANDBY, LOAD_ERROR, LOAD_END, LOAD_ING})
+    public @interface Status {
     }
+
 
     /**
      * RecyclerView当前状态
      */
-    private Status status = Status.LOAD_STANDBY;
+    private int status = LOAD_STANDBY;
     /**
      * 源Adapter，代理模式
      */
@@ -76,11 +82,11 @@ public class PullAdapter extends RecyclerView.Adapter {
                  */
                 if (newState == SCROLL_STATE_IDLE
                         && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
-                        && (status == Status.LOAD_STANDBY)
+                        && (status == LOAD_STANDBY)
                         && (manager.findLastVisibleItemPosition() == sourceAdapter.getItemCount()
                         && manager.findFirstCompletelyVisibleItemPosition() != 0)) {
                     //开始加载
-                    status = Status.LOAD_ING;
+                    status = LOAD_ING;
                     endView.setVisibility(VISIBLE);
                     ((IEnd) endView).onShow();
                     if (onLoadListener != null) {
@@ -155,13 +161,13 @@ public class PullAdapter extends RecyclerView.Adapter {
              */
             if (state == SCROLL_STATE_IDLE
                     && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
-                    && (status == Status.LOAD_STANDBY)) {
+                    && (status == LOAD_STANDBY)) {
                 View view = layoutManager.findViewByPosition(sourceAdapter.getItemCount());
                 int[] location = new int[2];
                 view.getLocationInWindow(location);
                 if (location[1] <= Resources.getSystem().getDisplayMetrics().heightPixels) {
                     //可见了
-                    status = Status.LOAD_ING;
+                    status = LOAD_ING;
                     endView.setVisibility(VISIBLE);
                     ((IEnd) endView).onShow();
                     if (onLoadListener != null) {
@@ -177,17 +183,21 @@ public class PullAdapter extends RecyclerView.Adapter {
      *
      * @param status，刷新到底了 / 网络错误 / 刷新结束，待命状态
      */
-    public void setLoadResult(Status status) {
-        if (status == Status.LOAD_END) {
-            this.status = status;
-            ((IEnd) endView).inTheEnd();
-        } else if (status == Status.LOAD_ERROR) {
-            this.status = status;
-            ((IEnd) endView).onError();
-        } else if (status == Status.LOAD_STANDBY) {
-            this.status = status;
-            ((IEnd) endView).onDismiss();
+    public void setLoadResult(@Status int status) {
+        switch (status) {
+            case LOAD_END:
+                ((IEnd) endView).inTheEnd();
+                break;
+            case LOAD_ERROR:
+                ((IEnd) endView).onError();
+                break;
+            case LOAD_STANDBY:
+                ((IEnd) endView).onDismiss();
+                break;
+            default:
+                return;
         }
+        this.status = status;
     }
 
     /**
@@ -204,8 +214,8 @@ public class PullAdapter extends RecyclerView.Adapter {
         this.endView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (status == Status.LOAD_ERROR) {
-                    status = Status.LOAD_ING;
+                if (status == LOAD_ERROR) {
+                    status = LOAD_ING;
                     ((IEnd) v).onShow();
                     if (onLoadListener != null) {
                         onLoadListener.onReLoad();
