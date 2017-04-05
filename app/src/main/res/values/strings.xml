@@ -3,6 +3,9 @@
     <string name="pull">上拉加载</string>
     <string name="item_decoration">ItemDecoration</string>
     <string name="header_crash">头部碰撞</string>
+    <string name="pull_normal">一般场景</string>
+    <string name="pull_nested">嵌套场景</string>
+    <string name="pull_fragment">Fragment场景</string>
     <string name="layout_manager">LayoutManager</string>
     <string name="item_animator">ItemAnimator</string>
 </resources>

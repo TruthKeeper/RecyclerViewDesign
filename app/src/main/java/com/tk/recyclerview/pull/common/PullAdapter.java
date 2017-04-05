@@ -64,6 +64,10 @@ public class PullAdapter extends RecyclerView.Adapter {
      * 加载视图，@NonNull
      */
     private View endView;
+    /**
+     * 无数据时是否显示空视图，默认显示
+     */
+    private boolean emptyViewFitShow = true;
 
     private RecyclerView.LayoutManager layoutManager;
     /**
@@ -143,6 +147,7 @@ public class PullAdapter extends RecyclerView.Adapter {
     public PullAdapter(@NonNull RecyclerView.Adapter sourceAdapter, @Nullable View emptyView, @NonNull View endView) {
         this.sourceAdapter = sourceAdapter;
         this.emptyView = emptyView;
+        this.emptyView.setVisibility(VISIBLE);
         initEndView(endView);
     }
 
@@ -198,6 +203,24 @@ public class PullAdapter extends RecyclerView.Adapter {
                 return;
         }
         this.status = status;
+    }
+
+    /**
+     * <pre>
+     *     适配空数据时是否显示 空视图
+     *     场景：初始化成false，页面第一次加载后设置为true,
+     *     效果为第一次进页面不显示空视图，后续加载如无数据显示空视图
+     * <pre/>
+     *
+     * @param emptyViewFitShow
+     */
+    public void setEmptyViewFitShow(boolean emptyViewFitShow) {
+        if (this.emptyViewFitShow != emptyViewFitShow) {
+            this.emptyViewFitShow = emptyViewFitShow;
+            if (sourceAdapter.getItemCount() == 0) {
+                notifyDataSetChanged();
+            }
+        }
     }
 
     /**
@@ -324,7 +347,11 @@ public class PullAdapter extends RecyclerView.Adapter {
             throw new IllegalArgumentException("EndView is null!");
         }
         if (sourceAdapter.getItemCount() == 0) {
-            return emptyView == null ? 0 : 1;
+            if (emptyView == null) {
+                return 0;
+            } else {
+                return emptyViewFitShow ? 1 : 0;
+            }
         }
         return sourceAdapter.getItemCount() + 1;
     }

@@ -35,6 +35,7 @@ public class ItemActivity extends AppCompatActivity {
         recyclerview.addItemDecoration(new NoLastItemDecoration(this, 0, 0));
 
         mList.add(new Item(getString(R.string.header_crash), new Intent(this, HeaderCrashActivity.class)));
+        mList.add(new Item(getString(R.string.header_crash), new Intent(this, HeaderCrashActivity.class)));
 
         recyclerview.setAdapter(new MainAdapter(mList));
     }
