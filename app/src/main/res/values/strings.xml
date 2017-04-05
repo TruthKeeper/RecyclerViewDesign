@@ -2,7 +2,7 @@
     <string name="app_name">RecyclerView</string>
     <string name="pull">上拉加载</string>
     <string name="item_decoration">ItemDecoration</string>
-    <string name="header_push">头部位移</string>
+    <string name="header_crash">头部碰撞</string>
     <string name="layout_manager">LayoutManager</string>
     <string name="item_animator">ItemAnimator</string>
 </resources>

@@ -21,7 +21,7 @@
         <activity android:name=".pull.nested.PullNestedActivity" />
         <activity android:name=".pull.fragment.PullFragmentActivity" />
         <activity android:name=".item.ItemActivity" />
-        <activity android:name=".item.headerpush.HeaderPushActivity" />
+        <activity android:name=".item.headercrash.HeaderCrashActivity" />
     </application>
 
 </manifest>

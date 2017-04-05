@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.tk.recyclerview.Item;
 import com.tk.recyclerview.MainAdapter;
 import com.tk.recyclerview.R;
-import com.tk.recyclerview.item.headerpush.HeaderPushActivity;
+import com.tk.recyclerview.item.headercrash.HeaderCrashActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ItemActivity extends AppCompatActivity {
         recyclerview.setHasFixedSize(true);
         recyclerview.addItemDecoration(new NoLastItemDecoration(this, 0, 0));
 
-        mList.add(new Item(getString(R.string.header_push), new Intent(this, HeaderPushActivity.class)));
+        mList.add(new Item(getString(R.string.header_crash), new Intent(this, HeaderCrashActivity.class)));
 
         recyclerview.setAdapter(new MainAdapter(mList));
     }

@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.ItemHolder> {
     private List<String> mList;
-    private LayoutInflater mInflater;
 
     public SimpleAdapter(List<String> mList) {
         this.mList = mList;
