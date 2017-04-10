@@ -227,7 +227,10 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
         } else if (realOffset > 0) {
 
             View lastChild = getChildAt(getChildCount() - 1);
-            if (getPosition(lastChild) == getItemCount() - 1) {
+            if (getItemCount() == getChildCount() && (getHeight() - getPaddingBottom()) >= getDecoratedBottom(lastChild)) {
+                //屏幕下方留空时
+                realOffset = 0;
+            } else if (getPosition(lastChild) == getItemCount() - 1) {
                 int gap = getHeight() - getPaddingBottom() - getDecoratedBottom(lastChild);
                 if (gap > 0) {
                     realOffset = -gap;
@@ -238,14 +241,15 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
                 }
             }
         }
-
+        if (realOffset == 0) {
+            return 0;
+        }
         realOffset = fill(recycler, state, realOffset);//先填充，再位移。
 
         verticalOffset += realOffset;//累加实际滑动距离
 
         offsetChildrenVertical(-realOffset);//滑动
         return realOffset;
-//        return super.scrollVerticallyBy(dy, recycler, state);
     }
 
     /**
