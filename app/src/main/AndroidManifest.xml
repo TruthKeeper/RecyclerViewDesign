@@ -23,6 +23,8 @@
         <activity android:name=".item.ItemActivity" />
         <activity android:name=".item.headercrash.HeaderCrashActivity" />
         <activity android:name=".item.folder.ItemFolderActivity" />
+        <activity android:name=".layout.LayoutManagerActivity" />
+        <activity android:name=".layout.flow.FlowActivity" />
     </application>
 
 </manifest>

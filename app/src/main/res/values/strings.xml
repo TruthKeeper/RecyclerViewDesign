@@ -11,5 +11,7 @@
     <string name="item_folder">折叠效果</string>
 
     <string name="layout_manager">LayoutManager</string>
+    <string name="flow_layout">流式布局</string>
+
     <string name="item_animator">ItemAnimator</string>
 </resources>
