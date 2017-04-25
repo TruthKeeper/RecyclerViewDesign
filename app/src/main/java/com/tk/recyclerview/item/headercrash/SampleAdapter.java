@@ -26,15 +26,15 @@ public class SampleAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mList.get(position).isTag() ? R.layout.list_tag : R.layout.list_item;
+        return mList.get(position).isTag() ? R.layout.item_tag : R.layout.item_main;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == R.layout.list_tag) {
-            return new TagHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_tag, parent, false));
+        if (viewType == R.layout.item_tag) {
+            return new TagHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false));
         } else {
-            return new ContentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+            return new ContentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_linear, parent, false));
         }
     }
 

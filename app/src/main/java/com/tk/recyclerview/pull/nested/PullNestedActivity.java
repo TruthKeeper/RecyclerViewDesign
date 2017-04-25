@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.tk.recyclerview.R;
-import com.tk.recyclerview.SimpleAdapter;
+import com.tk.recyclerview.adapter.LinearAdapter;
 import com.tk.recyclerview.pull.common.EmptyLayout;
 import com.tk.recyclerview.pull.common.EndLayout;
 import com.tk.recyclerview.pull.common.PullAdapter;
@@ -58,7 +58,7 @@ public class PullNestedActivity extends AppCompatActivity {
 
             }
         });
-        adapter = new PullAdapter(new SimpleAdapter(mList), new EmptyLayout(this), new EndLayout(this));
+        adapter = new PullAdapter(new LinearAdapter(mList), new EmptyLayout(this), new EndLayout(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setNestedScrollingEnabled(false);
 

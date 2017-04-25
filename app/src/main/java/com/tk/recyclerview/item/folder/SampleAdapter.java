@@ -19,7 +19,7 @@ public class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_folder, parent, false));
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_folder, parent, false));
 
     }
 

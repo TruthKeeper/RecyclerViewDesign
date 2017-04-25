@@ -172,14 +172,14 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
             }
 
             //添加完子view后，屏幕下还有空间，对dy进行修正
-            View lastChild = getChildAt(getChildCount() - 1);
-            if (getPosition(lastChild) == getItemCount() - 1) {
-                int space = getHeight() - getPaddingBottom() - getDecoratedBottom(lastChild);
-                if (space > 0) {
-                    dy -= space;
-                }
-
-            }
+//            View lastChild = getChildAt(getChildCount() - 1);
+//            if (getPosition(lastChild) == getItemCount() - 1) {
+//                int space = getHeight() - getPaddingBottom() - getDecoratedBottom(lastChild);
+//                if (space > 0) {
+//                    dy -= space;
+//                }
+//
+//            }
         } else {
             //下滑，从第一个显示的开始添加view，<倒序>
             firstVisibilePosition = 0;
@@ -219,36 +219,29 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
             //没有子View
             return 0;
         }
-        int realOffset = dy;//实际滑动的距离， 可能会在边界处被修复
-        //边界修复代码
-        if (verticalOffset + realOffset < 0) {
-            //下滑到顶了
-            realOffset = -verticalOffset;
-        } else if (realOffset > 0) {
-
-            View lastChild = getChildAt(getChildCount() - 1);
-            if (getItemCount() == getChildCount() && (getHeight() - getPaddingBottom()) >= getDecoratedBottom(lastChild)) {
-                //屏幕下方留空时
+        int realOffset = dy;
+        if (realOffset >= 0) {
+            //上滑
+            if (getItemCount() == getChildCount()) {
+                //上滑到底了
                 realOffset = 0;
-            } else if (getPosition(lastChild) == getItemCount() - 1) {
-                int gap = getHeight() - getPaddingBottom() - getDecoratedBottom(lastChild);
-                if (gap > 0) {
-                    realOffset = -gap;
-                } else if (gap == 0) {
-                    realOffset = 0;
-                } else {
-                    realOffset = Math.min(realOffset, -gap);
-                }
+            } else {
+                fill(recycler, state, realOffset);
+                verticalOffset += realOffset;
+                offsetChildrenVertical(-realOffset);
+            }
+        } else {
+            //下滑
+            if (verticalOffset + realOffset < 0) {
+                //下滑到顶了
+                realOffset = -verticalOffset;
+                verticalOffset += realOffset;
+            } else {
+                fill(recycler, state, realOffset);
+                verticalOffset += realOffset;
+                offsetChildrenVertical(-realOffset);
             }
         }
-        if (realOffset == 0) {
-            return 0;
-        }
-        realOffset = fill(recycler, state, realOffset);//先填充，再位移。
-
-        verticalOffset += realOffset;//累加实际滑动距离
-
-        offsetChildrenVertical(-realOffset);//滑动
         return realOffset;
     }
 

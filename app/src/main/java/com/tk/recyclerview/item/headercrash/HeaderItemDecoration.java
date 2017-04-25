@@ -77,7 +77,7 @@ public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
     private boolean needDrawOver(RecyclerView parent) {
         LinearLayoutManager manager = (LinearLayoutManager) parent.getLayoutManager();
         int position = manager.findFirstCompletelyVisibleItemPosition();
-        if (parent.getAdapter().getItemViewType(position) == R.layout.list_tag) {
+        if (parent.getAdapter().getItemViewType(position) == R.layout.item_tag) {
             //第一个显示的条目是Tag
             View view = manager.findViewByPosition(position);
             int[] viewL = new int[2];

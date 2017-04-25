@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tk.recyclerview.R;
-import com.tk.recyclerview.SimpleAdapter;
+import com.tk.recyclerview.adapter.LinearAdapter;
 import com.tk.recyclerview.pull.SimpleSwipeLayout;
 import com.tk.recyclerview.pull.common.EmptyLayout;
 import com.tk.recyclerview.pull.common.EndLayout;
@@ -50,7 +50,7 @@ public class TextFragment extends LazyFragment implements SwipeRefreshLayout.OnR
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
 
-        adapter = new PullAdapter(new SimpleAdapter(mList), new EmptyLayout(getContext()), new EndLayout(getContext()));
+        adapter = new PullAdapter(new LinearAdapter(mList), new EmptyLayout(getContext()), new EndLayout(getContext()));
         recyclerView.setAdapter(adapter);
 
         adapter.setOnLoadListener(this);

@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.tk.recyclerview.Item;
-import com.tk.recyclerview.MainAdapter;
+import com.tk.recyclerview.adapter.MainAdapter;
 import com.tk.recyclerview.R;
 import com.tk.recyclerview.item.NoLastItemDecoration;
 import com.tk.recyclerview.layout.flow.FlowActivity;
