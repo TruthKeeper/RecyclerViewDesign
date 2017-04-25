@@ -175,7 +175,6 @@ public class PullAdapter extends RecyclerView.Adapter {
 
     /**
      * 用于嵌套场景
-     * @param recyclerView
      * @param state NestedScrollView或者ScrollView的滚动状态
      */
     public void applyInNested(int state) {
