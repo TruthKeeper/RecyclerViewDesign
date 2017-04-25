@@ -1,6 +1,5 @@
 package com.tk.recyclerview.adapter;
 
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,23 +17,21 @@ import java.util.List;
  *     desc   : xxxx描述
  * </pre>
  */
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ItemHolder> {
+public class StaggereddAdapter extends RecyclerView.Adapter<StaggereddAdapter.ItemHolder> {
     private List<String> mList;
-    private int s;
 
-    public GridAdapter(List<String> mList, int span) {
+    public StaggereddAdapter(List<String> mList) {
         this.mList = mList;
-        //简单粗暴的写法，正式设计删除
-        s = Resources.getSystem().getDisplayMetrics().widthPixels / span;
     }
 
     @Override
     public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grid, parent,false));
+        return new ItemHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_staggered, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
+        holder.itemView.getLayoutParams().height = 320 + (1 - position % 5) * 60;
         ((TextView) holder.itemView).setText(mList.get(position));
     }
 
@@ -47,9 +44,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ItemHolder> {
 
         public ItemHolder(View itemView) {
             super(itemView);
-            ViewGroup.LayoutParams p = itemView.getLayoutParams();
-            p.height = s;
-            itemView.setLayoutParams(p);
         }
     }
 

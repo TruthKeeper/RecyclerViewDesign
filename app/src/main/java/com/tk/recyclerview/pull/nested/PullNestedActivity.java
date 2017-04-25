@@ -50,7 +50,7 @@ public class PullNestedActivity extends AppCompatActivity {
         scrollview.setOnScrollListener(new SimpleNestedScrollView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(SimpleNestedScrollView view, int scrollState) {
-                adapter.applyInNested(scrollState);
+                adapter.applyInNested(recyclerView,scrollState);
             }
 
             @Override

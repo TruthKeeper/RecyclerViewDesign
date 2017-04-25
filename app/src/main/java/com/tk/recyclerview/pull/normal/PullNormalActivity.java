@@ -7,9 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.tk.recyclerview.R;
+import com.tk.recyclerview.adapter.GridAdapter;
 import com.tk.recyclerview.adapter.LinearAdapter;
+import com.tk.recyclerview.adapter.StaggereddAdapter;
 import com.tk.recyclerview.pull.SimpleSwipeLayout;
 import com.tk.recyclerview.pull.common.EmptyLayout;
 import com.tk.recyclerview.pull.common.EndLayout;
@@ -34,6 +37,7 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
     private PullAdapter pullAdapter;
     private List<String> mList = new ArrayList<>();
     private Handler handler = new Handler();
+    private int mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +51,15 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 
         swipeLayout.setOnRefreshListener(this);
-        int mode = getIntent().getIntExtra("mode", 0);
+        mode = getIntent().getIntExtra("mode", 0);
         switch (mode) {
             case 1:
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+                pullAdapter = new PullAdapter(new GridAdapter(mList, 3), new EmptyLayout(this), new EndLayout(this));
                 break;
             case 2:
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+                pullAdapter = new PullAdapter(new StaggereddAdapter(mList), new EmptyLayout(this), new EndLayout(this));
                 break;
             default:
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,7 +87,7 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
                 swipeLayout.setRefreshing(false);
                 pullAdapter.getSourceAdapter().notifyDataSetChanged();
             }
-        }, 2000);
+        }, 1500);
     }
 
     @Override
@@ -100,27 +107,21 @@ public class PullNormalActivity extends AppCompatActivity implements SwipeRefres
     }
 
     private void getData() {
-        if (mList.size() < 25) {
-            final int r = new Random().nextInt(2);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (r > 0) {
-                        mList.add("新数据");
-                        pullAdapter.getSourceAdapter().notifyItemRangeInserted(pullAdapter.getSourceAdapter().getItemCount() - 1, 1);
-                        pullAdapter.setLoadResult(PullAdapter.LOAD_STANDBY);
-                    } else {
-                        pullAdapter.setLoadResult(PullAdapter.LOAD_ERROR);
-                    }
-                }
-            }, 1000);
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final int r = new Random().nextInt(10);
+                if (r > 3) {
+                    mList.add("新数据");
+                    pullAdapter.getSourceAdapter().notifyItemRangeInserted(pullAdapter.getSourceAdapter().getItemCount() - 1, 1);
+                    pullAdapter.setLoadResult(PullAdapter.LOAD_STANDBY);
+                } else if (r > 1) {
                     pullAdapter.setLoadResult(PullAdapter.LOAD_END);
+                } else {
+                    pullAdapter.setLoadResult(PullAdapter.LOAD_ERROR);
                 }
-            }, 1000);
-        }
+            }
+        }, 1000);
+
     }
 }

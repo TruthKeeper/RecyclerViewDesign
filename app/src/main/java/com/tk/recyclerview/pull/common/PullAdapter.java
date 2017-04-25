@@ -7,11 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
@@ -81,26 +83,41 @@ public class PullAdapter extends RecyclerView.Adapter {
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
+            int lastVisibleItemPosition = 0;
+            int firstCompletelyVisibleItemPosition = 0;
+
             if (layoutManager instanceof LinearLayoutManager) {
                 LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
-                /*
-                 * 悬停状态
-                 * Adapter有数据
-                 * 待命状态
-                 * 滚动到底
-                 */
-                if (newState == SCROLL_STATE_IDLE
-                        && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
-                        && (status == LOAD_STANDBY)
-                        && (manager.findLastVisibleItemPosition() == sourceAdapter.getItemCount()
-                        && manager.findFirstCompletelyVisibleItemPosition() != 0)) {
-                    //开始加载
-                    status = LOAD_ING;
-                    endView.setVisibility(VISIBLE);
-                    ((IEnd) endView).onShow();
-                    if (onLoadListener != null) {
-                        onLoadListener.onLoad();
-                    }
+                lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+                firstCompletelyVisibleItemPosition = manager.findFirstCompletelyVisibleItemPosition();
+
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                StaggeredGridLayoutManager manager = (StaggeredGridLayoutManager) layoutManager;
+                int[] pos = new int[manager.getSpanCount()];
+                manager.findLastVisibleItemPositions(pos);
+                Arrays.sort(pos);
+                lastVisibleItemPosition = pos[manager.getSpanCount() - 1];
+                manager.findFirstCompletelyVisibleItemPositions(pos);
+                Arrays.sort(pos);
+                firstCompletelyVisibleItemPosition = pos[0];
+            }
+             /*
+              * 悬停状态
+              * Adapter有数据
+              * 待命状态
+              * 滚动到底
+              */
+            if (newState == SCROLL_STATE_IDLE
+                    && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
+                    && (status == LOAD_STANDBY)
+                    && (lastVisibleItemPosition == sourceAdapter.getItemCount()
+                    && firstCompletelyVisibleItemPosition != 0)) {
+                //开始加载
+                status = LOAD_ING;
+                endView.setVisibility(VISIBLE);
+                ((IEnd) endView).onShow();
+                if (onLoadListener != null) {
+                    onLoadListener.onLoad();
                 }
             }
         }
@@ -157,32 +174,30 @@ public class PullAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * 用于嵌套
-     *
-     * @param state 外部滚动控件的滚动状态
+     * 用于嵌套场景
+     * @param recyclerView
+     * @param state NestedScrollView或者ScrollView的滚动状态
      */
-    public void applyInNested(int state) {
-        if (layoutManager instanceof LinearLayoutManager) {
+    public void applyInNested(RecyclerView recyclerView,int state) {
             /*
              * 悬停状态
              * Adapter有数据
              * 待命状态
              * 滚动到底
              */
-            if (state == SCROLL_STATE_IDLE
-                    && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
-                    && (status == LOAD_STANDBY)) {
-                View view = layoutManager.findViewByPosition(sourceAdapter.getItemCount());
-                int[] location = new int[2];
-                view.getLocationInWindow(location);
-                if (location[1] <= Resources.getSystem().getDisplayMetrics().heightPixels) {
-                    //可见了
-                    status = LOAD_ING;
-                    endView.setVisibility(VISIBLE);
-                    ((IEnd) endView).onShow();
-                    if (onLoadListener != null) {
-                        onLoadListener.onLoad();
-                    }
+        if (state == SCROLL_STATE_IDLE
+                && (sourceAdapter != null && sourceAdapter.getItemCount() != 0)
+                && (status == LOAD_STANDBY)) {
+            View view = layoutManager.findViewByPosition(sourceAdapter.getItemCount());
+            int[] location = new int[2];
+            view.getLocationInWindow(location);
+            if (location[1] <= Resources.getSystem().getDisplayMetrics().heightPixels) {
+                //可见了
+                status = LOAD_ING;
+                endView.setVisibility(VISIBLE);
+                ((IEnd) endView).onShow();
+                if (onLoadListener != null) {
+                    onLoadListener.onLoad();
                 }
             }
         }
@@ -269,6 +284,21 @@ public class PullAdapter extends RecyclerView.Adapter {
         sourceAdapter.onDetachedFromRecyclerView(recyclerView);
         sourceAdapter.unregisterAdapterDataObserver(dataObserver);
         recyclerView.removeOnScrollListener(onScrollListener);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        //瀑布流的支持
+        ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+        if (params != null
+                && params instanceof StaggeredGridLayoutManager.LayoutParams
+                && holder instanceof UIHolder) {
+            StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) params;
+            //独占一行、列
+            p.setFullSpan(true);
+        }
+        sourceAdapter.onViewAttachedToWindow(holder);
     }
 
     /**
