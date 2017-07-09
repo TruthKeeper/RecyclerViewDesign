@@ -11,6 +11,7 @@ import com.tk.recyclerview.item.ItemActivity;
 import com.tk.recyclerview.item.NoLastItemDecoration;
 import com.tk.recyclerview.layout.LayoutManagerActivity;
 import com.tk.recyclerview.pull.PullActivity;
+import com.tk.recyclerview.sample.SampleActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mList.add(new Item(getString(R.string.pull), new Intent(this, PullActivity.class)));
         mList.add(new Item(getString(R.string.item_decoration), new Intent(this, ItemActivity.class)));
         mList.add(new Item(getString(R.string.layout_manager), new Intent(this, LayoutManagerActivity.class)));
+        mList.add(new Item(getString(R.string.sample), new Intent(this, SampleActivity.class)));
 //        mList.add(new Item("ItemAnimator", new Intent(this,  .class));
 //        mList.add(new Item("ItemTouch", new Intent(this,  .class));
 

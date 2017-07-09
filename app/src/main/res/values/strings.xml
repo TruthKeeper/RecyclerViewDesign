@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RecyclerViewDesign</string>
 
+    <string name="sample">测试</string>
     <string name="pull">上拉加载</string>
     <string name="pull_normal">一般场景</string>
     <string name="pull_nested">嵌套场景</string>

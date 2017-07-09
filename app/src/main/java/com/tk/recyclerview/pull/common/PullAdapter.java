@@ -169,7 +169,9 @@ public class PullAdapter extends RecyclerView.Adapter {
     public PullAdapter(@NonNull RecyclerView.Adapter sourceAdapter, @Nullable View emptyView, @NonNull View endView) {
         this.sourceAdapter = sourceAdapter;
         this.emptyView = emptyView;
-        this.emptyView.setVisibility(VISIBLE);
+        if (this.emptyView != null) {
+            this.emptyView.setVisibility(VISIBLE);
+        }
         initEndView(endView);
     }
 
